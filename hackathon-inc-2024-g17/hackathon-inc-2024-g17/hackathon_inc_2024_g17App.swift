@@ -11,7 +11,7 @@ import SwiftUI
 struct hackathon_inc_2024_g17App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Home()
         }
     }
 }

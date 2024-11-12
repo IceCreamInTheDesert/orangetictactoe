@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  Game.swift
 //  hackathon-inc-2024-g17
 //
 //  Created by Dhanush  on 12/11/24.
@@ -11,8 +11,18 @@ enum Player: String {
     case x = "X"
     case o = "O"
 }
-
-struct ContentView: View {
+extension Color {
+    init(hex: Int) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xff) / 255,
+            green: Double((hex >> 08) & 0xff) / 255,
+            blue: Double((hex >> 00) & 0xff) / 255
+            
+        )
+    }
+}
+struct Game: View {
     @State private var currentPlayer: Player = .x
     @State private var cells: [[Player?]] = Array(repeating: Array(repeating: nil, count: 3), count: 3)
     @State private var winner: Player?
@@ -45,7 +55,7 @@ struct ContentView: View {
                         }, label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundColor(currectColor(row, column))
+                                    .foregroundColor(currentColor(row, column))
                                     .frame(width: 80, height: 80)
                                     .shadow(radius: 5)
                                 Text(cells[row][column]?.rawValue ?? "")
@@ -55,7 +65,6 @@ struct ContentView: View {
                         })
                         .disabled(winner == nil ? false : true)
                         .scaleEffect(winningCells.contains([row, column]) ? 1.2 : 1.0)
-                        .animation(.easeInOut(duration: 0.5))
                     }
                 }
             }
@@ -66,13 +75,11 @@ struct ContentView: View {
                 Text("Player \(winner.rawValue) wins!")
                     .foregroundColor(.green)
                     .scaleEffect(2.0)
-                    .animation(.linear(duration: 0.5))
                     .padding(.vertical)
             } else if isDraw {
                 Text("It's a draw!")
                     .foregroundColor(.orange)
                     .scaleEffect(2.0)
-                    .animation(.linear(duration: 0.5))
                     .padding(.vertical)
             }
             
@@ -88,9 +95,9 @@ struct ContentView: View {
         .padding()
     }
     
-    func currectColor(_ row:Int,_ column:Int)->Color{
+    func currentColor(_ row:Int,_ column:Int)->Color{
         if cells[row][column] == .x {
-            return .red
+            return Color(hex: 079010)
         }else if cells[row][column] == .o {
             return .blue
         }
@@ -143,8 +150,8 @@ struct ContentView: View {
         winningCells = Set()
     }
 }
-struct ContentView_Previews: PreviewProvider {
+struct Game_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        Game()
     }
 }
